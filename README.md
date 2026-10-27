@@ -5,7 +5,7 @@ on one live production codebase at the same time** without breaking each other, 
 owner's trust.
 
 I was hired to modernize the codebase of a small company's operations platform, working alongside
-one other developer, the original architect. A few months ago I became the only developer. This
+one other developer, the platform's original author. A few months ago I became the only developer. This
 repo is an anonymized extract of the system I built so that one person directing several AI agent
 sessions could keep shipping dozens of changes a week to a business that runs on the app every day.
 
