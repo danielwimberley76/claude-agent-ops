@@ -1,0 +1,6 @@
+# Machine posture — copy to .claude/machine.local.md (gitignored) on each machine
+
+This file exists only to name which profile in `.claude/machines/` applies to this machine.
+Put no rules here — rules go in the tracked profile.
+
+@machines/dev.md

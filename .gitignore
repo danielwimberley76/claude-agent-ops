@@ -1,0 +1,17 @@
+# Machine-local posture selector — one per machine, never shared
+.claude/machine.local.md
+
+# Per-session edit ledgers written by tools/hooks/edit_ledger.php
+.claude/session-ledger/
+
+# Generated board — rendered from the task files by tools/board.py
+.claude/pending/pending.md
+
+# Dependencies and caches
+vendor/
+__pycache__/
+*.pyc
+
+# Credentials
+config/*_db.json
+.env

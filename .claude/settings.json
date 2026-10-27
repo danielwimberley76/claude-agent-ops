@@ -1,0 +1,67 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/deploy_gate.php\" prompt", "timeout": 10 }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "if": "Bash(git *)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/git_commit_guard.php\" pre", "timeout": 10 },
+          { "type": "command", "if": "Bash(*php*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/prod_write_guard.php\"", "timeout": 10 },
+          { "type": "command", "if": "Bash(*push*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/deploy_gate.php\" pre", "timeout": 10 },
+          { "type": "command", "if": "Bash(*pipeline*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/deploy_gate.php\" pre", "timeout": 10 },
+          { "type": "command", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/ssh_guard.php\"", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "PowerShell",
+        "hooks": [
+          { "type": "command", "if": "PowerShell(*git*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/git_commit_guard.php\" pre", "timeout": 10 },
+          { "type": "command", "if": "PowerShell(*php*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/prod_write_guard.php\"", "timeout": 10 },
+          { "type": "command", "if": "PowerShell(*push*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/deploy_gate.php\" pre", "timeout": 10 },
+          { "type": "command", "if": "PowerShell(*pipeline*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/deploy_gate.php\" pre", "timeout": 10 },
+          { "type": "command", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/ssh_guard.php\"", "timeout": 10 }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/kb_check_hook.php\" 2>/dev/null || true" },
+          { "type": "command", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/edit_ledger.php\" 2>/dev/null || true", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/edit_ledger.php\" 2>/dev/null || true", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "if": "Bash(git *)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/git_commit_guard.php\" post 2>/dev/null || true", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "PowerShell",
+        "hooks": [
+          { "type": "command", "if": "PowerShell(*git*)", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/git_commit_guard.php\" post 2>/dev/null || true", "timeout": 10 }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "php \"${CLAUDE_PROJECT_DIR:-.}/tools/hooks/wrapup_guard.php\" 2>/dev/null || true", "timeout": 30 }
+        ]
+      }
+    ]
+  }
+}
