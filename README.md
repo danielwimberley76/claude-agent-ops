@@ -53,7 +53,15 @@ tools/
   precheck.php                  the gate before any deploy hand-off
 lib/WriteScopeGuard.php         a bulk write that counts its own predicate first
 tests/run_smoke.py              36 allow/deny cases across every hook
+integrations/samsara/           production fleet-API patterns: event attribution + replay,
+                                a no-sandbox write gate, idempotent route creation
 ```
+
+**[`integrations/samsara/`](integrations/samsara/README.md)** is the other half of the story: code
+from the dispatch system itself. It covers geofence events attributed by physics instead of by
+current state (proved by replaying history at point-in-time state), a write gate for an API with no
+sandbox, and route creation that stays idempotent through webhook bursts and an eventually
+consistent lookup.
 
 ### The hooks
 
@@ -133,6 +141,7 @@ python tools/board.py --check    # validate tasks + the machine-profile chain
 python tools/kb_index.py --check
 python tools/kb_check.py
 python tests/run_smoke.py        # 36 hook cases, allow and deny
+php integrations/samsara/tests/run_tests.php   # 32 cases, incl. the attribution replay
 php tools/precheck.php --full    # lint + docs; exits 2 if phpstan/phpunit aren't installed (SKIP ≠ PASS)
 ```
 
